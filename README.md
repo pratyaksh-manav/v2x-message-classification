@@ -96,8 +96,7 @@ v2x-message-classification/
 ├── paper/                              # IEEE Two-Column Research Paper Source & Assets
 │   ├── V2X_KAN_GRU_Research_Paper.pdf  # Compiled publication-ready PDF (Overleaf)
 │   ├── main.tex                        # LaTeX manuscript source (IEEEtran format)
-│   ├── V2X_Overleaf_Project.zip        # Complete Overleaf upload bundle (1-click compile)
-│   ├── INSTRUCTIONS_OVERLEAF.md        # Overleaf compilation instructions
+│   ├── V2X_Overleaf_Project.zip        # Complete Overleaf LaTeX bundle (main.tex + figures)
 │   ├── fig1_v2x_ecosystem.png          # Fig 1: V2X Ecosystem & Communication Modes
 │   ├── fig2_threat_taxonomy.png        # Fig 2: Comprehensive Threat Taxonomy
 │   ├── fig3_process_flowchart.png      # Fig 3: End-to-End Deep Learning Process Flowchart
@@ -111,7 +110,6 @@ v2x-message-classification/
 │   └── fig4_kangru_architecture.drawio # Editable Draw.io XML vector diagram
 ├── presentation/                       # Presentation & Defense Deliverables
 │   ├── V2X_KAN_GRU_Presentation.pptx   # 13-Slide PowerPoint deck with embedded diagrams
-│   ├── SPEAKER_NOTES_AND_DEFENSE_SCRIPT.md # Slide-by-slide speaker notes & defense Q&A
 │   └── presentation_slides.md          # Markdown presentation source
 └── docs/
     └── ARCHITECTURE_AND_EVALUATION.md  # Mathematical formulations & layer diagrams
