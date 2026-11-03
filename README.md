@@ -14,8 +14,8 @@ A state-of-the-art deep learning cyber-defense and multi-label message classific
 ## 👥 Authors & Affiliation
 
 * **Pratyaksh Manav** (`manavpratyaksh@gmail.com`)
-* **Abhayraj Verma** (`abhayrajverma@gmail.com`)
-* **Arnav Tomar** (`arnavtomar@gmail.com`)
+* **Abhayraj Verma**
+* **Arnav Tomar**
 
 *Bachelor of Technology in Computer Science & Engineering (Specialization in Artificial Intelligence)*  
 *School of Computer Science and Technology, Bennett University, Greater Noida, India*  

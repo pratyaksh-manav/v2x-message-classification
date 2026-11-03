@@ -161,8 +161,8 @@ date: "November 2026"
 
 ### Team Members
 - **Pratyaksh Manav** (manavpratyaksh@gmail.com)
-- **Abhayraj Verma** (abhayrajverma@gmail.com)
-- **Arnav Tomar** (arnavtomar@gmail.com)
+- **Abhayraj Verma**
+- **Arnav Tomar**
 
 **Department**: School of Computer Science & Technology, Bennett University, Greater Noida, India  
 **Course**: B.Tech CSE (Specialization in Artificial Intelligence)  
