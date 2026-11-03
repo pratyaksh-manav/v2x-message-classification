@@ -1,0 +1,62 @@
+<mxfile host="app.diagrams.net" modified="2026-11-03T01:40:00.000Z" agent="Mozilla/5.0" version="24.0.0">
+  <diagram id="threat_taxonomy" name="V2X Threat Taxonomy">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#ffffff">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Root node -->
+        <mxCell id="root" value="&lt;b&gt;V2X Cyber-Physical Security Threat Taxonomy&lt;/b&gt;&lt;br/&gt;(Multi-Label Anomaly Landscape)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1A73E8;strokeColor=#155724;fontColor=#ffffff;fontSize=13;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="30" width="400" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Pillar 1: Authentication -->
+        <mxCell id="p1" value="&lt;b&gt;Authentication&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F0FE;strokeColor=#1A73E8;fontColor=#174EA6;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="p1_desc" value="• &lt;b&gt;Sybil Attacks&lt;/b&gt;&lt;br/&gt;• Ghost Vehicle Injections&lt;br/&gt;• Masquerade Attacks&lt;br/&gt;• Rogue Cert Signatures" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1A73E8;fontColor=#202124;fontSize=10;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="190" width="180" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- Pillar 2: Availability -->
+        <mxCell id="p2" value="&lt;b&gt;Availability&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#F9AB00;fontColor=#B06000;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="250" y="140" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="p2_desc" value="• &lt;b&gt;Spam Flooding Attacks&lt;/b&gt;&lt;br/&gt;• Channel Jamming (DSRC)&lt;br/&gt;• Non-Priority Packet Floods&lt;br/&gt;• Bandwidth Exhaustion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#F9AB00;fontColor=#202124;fontSize=10;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="250" y="190" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Pillar 3: Confidentiality -->
+        <mxCell id="p3" value="&lt;b&gt;Confidentiality&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#C5221F;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="460" y="140" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="p3_desc" value="• Radio Eavesdropping&lt;br/&gt;• Side-Channel Sniffing&lt;br/&gt;• Man-in-the-Middle (MitM)&lt;br/&gt;• Cleartext Telemetry Leaks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#D93025;fontColor=#202124;fontSize=10;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="190" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Pillar 4: Integrity -->
+        <mxCell id="p4" value="&lt;b&gt;Integrity&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#137333;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="670" y="140" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="p4_desc" value="• &lt;b&gt;GPS / Location Tampering&lt;/b&gt;&lt;br/&gt;• &lt;b&gt;Replay Attacks&lt;/b&gt;&lt;br/&gt;• &lt;b&gt;False Information&lt;/b&gt;&lt;br/&gt;• Fictitious DENM Hazards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1E8E3E;fontColor=#202124;fontSize=10;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="670" y="190" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Pillar 5: Privacy -->
+        <mxCell id="p5" value="&lt;b&gt;Privacy&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FD;strokeColor=#9334E6;fontColor=#7627BB;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="880" y="140" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="p5_desc" value="• Vehicular Tracking&lt;br/&gt;• Certificate De-anonymization&lt;br/&gt;• Location History Profiling&lt;br/&gt;• MAC Address Corroboration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9334E6;fontColor=#202124;fontSize=10;align=left;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="880" y="190" width="180" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- Branches from Root -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=1.5;" edge="1" parent="1" source="root" target="p1"/>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=1.5;" edge="1" parent="1" source="root" target="p2"/>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=1.5;" edge="1" parent="1" source="root" target="p3"/>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=1.5;" edge="1" parent="1" source="root" target="p4"/>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=1.5;" edge="1" parent="1" source="root" target="p5"/>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

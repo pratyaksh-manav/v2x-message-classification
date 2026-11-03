@@ -1,0 +1,41 @@
+<mxfile host="app.diagrams.net" modified="2026-11-03T01:40:00.000Z" agent="Mozilla/5.0" version="24.0.0">
+  <diagram id="process_flowchart" name="Deep Learning Process Flow">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#ffffff">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Step 1: Start & Input -->
+        <mxCell id="s1" value="&lt;b&gt;START &amp; DATA INGESTION&lt;/b&gt;&lt;hr/&gt;• IEEE DataPort V2X Dataset&lt;br/&gt;• 6,000 Synthetic PDUs&lt;br/&gt;• Protocols: BSM, CAM, DENM,&lt;br/&gt;  SPAT, MAP, RSA&lt;br/&gt;• 5 Cyber-Threat Classes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;strokeWidth=2;fontSize=10;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="30" y="100" width="180" height="160" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 2: Preprocessing -->
+        <mxCell id="s2" value="&lt;b&gt;TEXT PREPROCESSING&lt;/b&gt;&lt;hr/&gt;• Regex Key-Value Extraction&lt;br/&gt;• Alphanumeric Tokenizer&lt;br/&gt;• Ranked Vocab (|V|=1,500)&lt;br/&gt;• Post-Padding (L=50)&lt;br/&gt;• Multi-Label Binarizer (11-d)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F0FE;strokeColor=#1A73E8;strokeWidth=2;fontSize=10;fontColor=#174EA6;" vertex="1" parent="1">
+          <mxGeometry x="250" y="100" width="180" height="160" as="geometry"/>
+        </mxCell>
+        
+        <!-- Step 3: DL Architectures -->
+        <mxCell id="s3" value="&lt;b&gt;DEEP LEARNING SUITE&lt;/b&gt;&lt;hr/&gt;• &lt;b&gt;Proposed KAN-GRU&lt;/b&gt;&lt;br/&gt;• CNN-BRNN (Enhanced)&lt;br/&gt;• Standalone KAN Layer&lt;br/&gt;• Bidirectional GRU / BRNN&lt;br/&gt;• CNN-BLSTM / BLSTM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#F9AB00;strokeWidth=2;fontSize=10;fontColor=#B06000;" vertex="1" parent="1">
+          <mxGeometry x="470" y="100" width="180" height="160" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 4: Inference Engine -->
+        <mxCell id="s4" value="&lt;b&gt;KAN-GRU INFERENCE&lt;/b&gt;&lt;hr/&gt;• Spline Edge Activations s(x)&lt;br/&gt;• 2-Layer BiGRU Temporal Gates&lt;br/&gt;• Attention Weight Pooling (α_t)&lt;br/&gt;• Dropout (p=0.20) + LayerNorm&lt;br/&gt;• Independent Sigmoids (τ=0.40)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;strokeWidth=2;fontSize=10;fontColor=#137333;" vertex="1" parent="1">
+          <mxGeometry x="690" y="100" width="180" height="160" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 5: Decision & Metrics -->
+        <mxCell id="s5" value="&lt;b&gt;METRIC VERIFICATION&lt;/b&gt;&lt;hr/&gt;• Accuracy: &lt;b&gt;97.80%&lt;/b&gt;&lt;br/&gt;• Precision: &lt;b&gt;99.45%&lt;/b&gt;&lt;br/&gt;• Recall: &lt;b&gt;96.80%&lt;/b&gt;&lt;br/&gt;• F1-Score: &lt;b&gt;98.10%&lt;/b&gt;&lt;br/&gt;• Latency: &lt;b&gt;7.82 ms/packet&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;strokeWidth=2;fontSize=10;fontColor=#C5221F;" vertex="1" parent="1">
+          <mxGeometry x="910" y="100" width="180" height="160" as="geometry"/>
+        </mxCell>
+        
+        <!-- Flow Connectors -->
+        <mxCell id="c1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=2;" edge="1" parent="1" source="s1" target="s2"/>
+        <mxCell id="c2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=2;" edge="1" parent="1" source="s2" target="s3"/>
+        <mxCell id="c3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=2;" edge="1" parent="1" source="s3" target="s4"/>
+        <mxCell id="c4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5F6368;strokeWidth=2;" edge="1" parent="1" source="s4" target="s5"/>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

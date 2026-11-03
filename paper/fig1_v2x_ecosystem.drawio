@@ -1,0 +1,54 @@
+<mxfile host="app.diagrams.net" modified="2026-11-03T01:40:00.000Z" agent="Mozilla/5.0" version="24.0.0">
+  <diagram id="v2x_ecosystem" name="V2X Architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" background="#ffffff">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Outer boundary -->
+        <mxCell id="bg" value="V2X Connected &amp; Autonomous Vehicular Ecosystem" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#BDC1C6;fontStyle=1;fontSize=14;fontColor=#202124;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1020" height="580" as="geometry"/>
+        </mxCell>
+        
+        <!-- Central Host OBU Node -->
+        <mxCell id="obu" value="&lt;b&gt;Host Connected Vehicle (OBU)&lt;/b&gt;&lt;hr/&gt;• On-Board Unit (OBU) Edge Processor&lt;br/&gt;• High-Rate Telemetry Ingestion&lt;br/&gt;• Real-Time KAN-GRU Threat Engine&lt;br/&gt;• Multi-Label Anomaly Classifier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F0FE;strokeColor=#1A73E8;strokeWidth=2;fontSize=12;fontColor=#174EA6;spacing=8;" vertex="1" parent="bg">
+          <mxGeometry x="360" y="200" width="300" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- Top-Left: Peer Vehicle (V2V) -->
+        <mxCell id="v2v" value="&lt;b&gt;Peer Vehicle (V2V)&lt;/b&gt;&lt;hr/&gt;• Basic Safety Messages (BSM)&lt;br/&gt;• Cooperative Awareness (CAM)&lt;br/&gt;• Cooperative Collision Warning&lt;br/&gt;• High-Speed Platooning Control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;strokeWidth=2;fontSize=11;fontColor=#137333;spacing=6;" vertex="1" parent="bg">
+          <mxGeometry x="50" y="70" width="240" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- Top-Right: Roadside Unit (V2I) -->
+        <mxCell id="v2i" value="&lt;b&gt;Roadside Unit / RSU (V2I)&lt;/b&gt;&lt;hr/&gt;• Signal Phase &amp; Timing (SPAT)&lt;br/&gt;• Intersection Geometry (MAP)&lt;br/&gt;• Roadside Safety Alerts (RSA)&lt;br/&gt;• Intersection Collision Mitigation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#F9AB00;strokeWidth=2;fontSize=11;fontColor=#B06000;spacing=6;" vertex="1" parent="bg">
+          <mxGeometry x="730" y="70" width="240" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- Bottom-Left: Pedestrian (V2P) -->
+        <mxCell id="v2p" value="&lt;b&gt;Vulnerable Road Users (V2P)&lt;/b&gt;&lt;hr/&gt;• Pedestrian Smartphone Telemetry&lt;br/&gt;• Cyclist Proximity Beacons&lt;br/&gt;• Crosswalk Protection Alerts&lt;br/&gt;• DSRC/C-V2X Direct Broadcast" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;strokeWidth=2;fontSize=11;fontColor=#C5221F;spacing=6;" vertex="1" parent="bg">
+          <mxGeometry x="50" y="370" width="240" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- Bottom-Right: Cloud / 5G (V2N) -->
+        <mxCell id="v2n" value="&lt;b&gt;Cellular Base Station / Cloud (V2N)&lt;/b&gt;&lt;hr/&gt;• 5G NR-V2X gNodeB Infrastructure&lt;br/&gt;• Central Traffic Orchestrator&lt;br/&gt;• Fleet-Wide Threat Intelligence&lt;br/&gt;• Global Dynamic Map Distribution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FD;strokeColor=#9334E6;strokeWidth=2;fontSize=11;fontColor=#7627BB;spacing=6;" vertex="1" parent="bg">
+          <mxGeometry x="730" y="370" width="240" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- Connecting Arrows -->
+        <mxCell id="arr_v2v" value="&lt;b&gt;V2V Direct Link&lt;/b&gt;&lt;br/&gt;(100 ms DSRC)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#1E8E3E;strokeWidth=2;fontColor=#1E8E3E;fontSize=10;" edge="1" parent="bg" source="v2v" target="obu">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr_v2i" value="&lt;b&gt;V2I Link&lt;/b&gt;&lt;br/&gt;(5.9 GHz DSRC)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#F9AB00;strokeWidth=2;fontColor=#B06000;fontSize=10;" edge="1" parent="bg" source="v2i" target="obu">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr_v2p" value="&lt;b&gt;V2P Safety Link&lt;/b&gt;&lt;br/&gt;(Direct Sidelink PC5)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#D93025;strokeWidth=2;fontColor=#C5221F;fontSize=10;" edge="1" parent="bg" source="v2p" target="obu">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr_v2n" value="&lt;b&gt;V2N 5G Link&lt;/b&gt;&lt;br/&gt;(Uu Cellular Interface)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#9334E6;strokeWidth=2;fontColor=#7627BB;fontSize=10;" edge="1" parent="bg" source="v2n" target="obu">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
