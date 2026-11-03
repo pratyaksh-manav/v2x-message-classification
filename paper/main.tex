@@ -51,7 +51,7 @@ Greater Noida, India}
 \maketitle
 
 \begin{abstract}
-Connected and Autonomous Vehicles (CAVs) rely fundamentally on Vehicle-to-Everything (V2X) wireless communications to disseminate mission-critical traffic safety telemetry and coordinate distributed collision avoidance maneuvers. Standardized communication frameworks, such as Dedicated Short-Range Communications (DSRC / IEEE 802.11p) and Cellular V2X (3GPP C-V2X / 5G NR-V2X), facilitate millisecond-level telemetry exchange. However, the decentralized, open-access wireless medium renders vehicular networks acutely susceptible to sophisticated cyber-physical intrusions, including Sybil identity fabrication, kinematic GPS coordinate tampering, message replay attacks, and fraudulent hazard dissemination. Existing Intrusion Detection Systems (IDS) frequently struggle to resolve complex non-linear attribute dependencies and sequential temporal patterns from variable-length message payloads, resulting in elevated false alarm rates and degraded multi-label classification accuracy. In this work, we propose a novel deep learning framework that fuses Kolmogorov-Arnold Networks (KAN) with Bidirectional Gated Recurrent Units (BiGRU), augmented by a trainable self-attention pooling mechanism, designated as \textbf{KAN-GRU}. Operating on standardized IEEE DataPort V2X message payloads (BSM, CAM, DENM, SPAT, MAP, and RSA), the proposed architecture incorporates an enhanced preprocessing pipeline utilizing sub-token feature extraction, sequence post-padding, and dense embedding vectorization. The KAN layers employ learnable B-spline and SiLU edge activation functions to model complex non-linear telemetry interactions, while the BiGRU captures forward and backward temporal dependencies. Benchmarked against baseline architectures from IEEE Document 11308890 (BRNN, CNN-BRNN, BLSTM, and CNN-BLSTM) as well as standalone KAN and GRU models across 6,000 empirical instances, the proposed KAN-GRU model achieves state-of-the-art performance with an accuracy of \textbf{97.80\%}, precision of \textbf{99.45\%}, recall of \textbf{96.80\%}, F1-score of \textbf{98.10\%}, and loss of \textbf{0.14}, substantially outperforming the original baseline CNN-BRNN benchmark (90.00\% accuracy) while guaranteeing an end-to-end inference latency under 8.5 milliseconds.
+Connected and Autonomous Vehicles (CAVs) depend critically on Vehicle-to-Everything (V2X) wireless communications to share real-time traffic safety telemetry and coordinate distributed collision avoidance maneuvers. Standardized communication frameworks, such as Dedicated Short-Range Communications (DSRC / IEEE 802.11p) and Cellular V2X (3GPP C-V2X / 5G NR-V2X), facilitate sub-second telemetry exchange; however, the decentralized and open-access broadcast medium leaves vehicular networks acutely exposed to multifaceted cyber-physical threats, including Sybil identity fabrication, GPS coordinate tampering, message replay, and deceptive road hazard broadcasting. Existing Intrusion Detection Systems (IDS) frequently struggle to disentangle complex non-linear attribute interdependencies and sequential temporal patterns across variable-length message payloads, resulting in elevated false alarm rates and compromised multi-label classification accuracy. In this work, we propose \textbf{KAN-GRU}, a novel deep learning architecture that fuses Kolmogorov-Arnold Networks (KAN) with Bidirectional Gated Recurrent Units (BiGRU), augmented by a trainable self-attention pooling mechanism. Operating over standardized IEEE DataPort V2X message payloads (BSM, CAM, DENM, SPAT, MAP, and RSA), the proposed pipeline incorporates structured sub-token feature extraction, sequence post-padding, and dense embedding vectorization. Evaluated on 6,000 empirical instances against baseline architectures from IEEE Document 11308890 (BRNN, CNN-BRNN, BLSTM, and CNN-BLSTM) alongside standalone KAN and GRU variants, KAN-GRU achieves state-of-the-art performance with an accuracy of \textbf{97.80\%}, macro-precision of \textbf{99.45\%}, macro-recall of \textbf{96.80\%}, macro-F1 score of \textbf{98.10\%}, and loss of \textbf{0.14}. This substantially outperforms the baseline CNN-BRNN benchmark (90.00\% accuracy) while guaranteeing an end-to-end inference latency under 8.5 milliseconds, fully conforming to strict onboard DSRC/C-V2X operational constraints.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -59,15 +59,15 @@ Vehicle-to-Everything (V2X), Kolmogorov-Arnold Networks (KAN), Gated Recurrent U
 \end{IEEEkeywords}
 
 \section{Introduction}
-Intelligent Transportation Systems (ITS) and Cooperative Connected and Autonomous Vehicles (CAVs) have experienced rapid technological evolution over the past decade, transforming modern transportation into an interconnected cyber-physical paradigm \cite{tabaa2020green, saurabh2022lbdmids}. At the cornerstone of this autonomous ecosystem lies Vehicle-to-Everything (V2X) communication, encompassing Vehicle-to-Vehicle (V2V), Vehicle-to-Infrastructure (V2I), Vehicle-to-Pedestrian (V2P), and Vehicle-to-Network (V2N) communication links standardized by the Society of Automotive Engineers (SAE J2735) and the European Telecommunications Standards Institute (ETSI ITS-G5) \cite{pourrahmani2022applications, rejeb2023unleashing}. Through periodic high-frequency broadcasts and event-triggered safety notifications, vehicular nodes continuously disseminate kinematic state vectors, environmental hazard alerts, and intersection topologies, providing vehicles with omnidirectional perception that extends far beyond the physical range of onboard LiDAR, RADAR, and optical camera sensors.
+Over the past decade, Intelligent Transportation Systems (ITS) and Cooperative Connected and Autonomous Vehicles (CAVs) have experienced rapid technological evolution, fundamentally transforming modern transit into an interconnected cyber-physical paradigm \cite{tabaa2020green, saurabh2022lbdmids}. At the core of this autonomous ecosystem lies Vehicle-to-Everything (V2X) communication, spanning Vehicle-to-Vehicle (V2V), Vehicle-to-Infrastructure (V2I), Vehicle-to-Pedestrian (V2P), and Vehicle-to-Network (V2N) links standardized under SAE J2735 and ETSI ITS-G5 specifications \cite{pourrahmani2022applications, rejeb2023unleashing}. Through high-frequency periodic beacons and event-triggered safety broadcasts, kinematic state vectors, environmental hazard alerts, and intersection topologies are continuously exchanged, granting vehicular nodes omnidirectional perception that extends well beyond the physical line-of-sight of onboard LiDAR, radar, and optical camera sensors.
 
 \subsection{V2X Ecosystem and Communication Architecture}
-The foundational architecture and operational communication modes governing autonomous and connected vehicular environments are illustrated in Fig. \ref{fig:ecosystem}. The modern V2X vehicular ecosystem comprises four foundational operational nodes:
+The foundational architecture and operational communication modes governing autonomous vehicular environments are depicted in Fig. \ref{fig:ecosystem}. Modern V2X vehicular ecosystems encompass four primary operational nodes:
 \begin{enumerate}
-    \item \textbf{On-Board Unit (OBU)}: Modern vehicular transceivers embedded with dedicated edge computing processors responsible for acquiring high-frequency sensor measurements (e.g., latitude, longitude, elevation, velocity, yaw rate, steering angle, and braking dynamics) and executing onboard threat detection.
-    \item \textbf{Roadside Units (RSU)}: Fixed infrastructural nodes strategically positioned along highway corridors and urban intersections, orchestrating dynamic signal phase and timing (SPAT) and lane topological descriptions (MAP) via low-latency V2I channels.
-    \item \textbf{Vulnerable Road Users (VRU)}: Pedestrians, cyclists, and roadside personnel equipped with cellular beacon interfaces communicating through low-latency direct sidelink V2P links to mitigate crosswalk accidents.
-    \item \textbf{Cellular Base Stations and Central Cloud Servers}: High-throughput 5G Next Generation NodeB (gNodeB) infrastructure and traffic management servers providing global traffic routing and fleet-wide cyber-threat intelligence distribution via V2N cellular interfaces.
+    \item \textbf{On-Board Unit (OBU)}: Dedicated vehicular edge processors responsible for continuously collecting high-rate kinematic telemetry (latitude, longitude, elevation, velocity, yaw rate, steering angle, and brake dynamics) while executing onboard intrusion detection.
+    \item \textbf{Roadside Units (RSU)}: Fixed infrastructural nodes strategically positioned along highway corridors and urban intersections, orchestrating dynamic signal phase and timing (SPAT) and lane topological descriptions (MAP) over low-latency V2I channels.
+    \item \textbf{Vulnerable Road Users (VRU)}: Pedestrians, cyclists, and roadway maintenance personnel equipped with cellular beacon transceivers communicating via direct sidelink V2P links to mitigate crosswalk accidents.
+    \item \textbf{Cellular Base Stations and Central Cloud Servers}: High-capacity 5G Next Generation NodeB (gNodeB) infrastructure and traffic management centers providing wide-area routing, road safety advisories, and fleet-wide cyber-threat intelligence distribution via V2N cellular links.
 \end{enumerate}
 
 \begin{figure}[t]
@@ -78,13 +78,13 @@ The foundational architecture and operational communication modes governing auto
 \end{figure}
 
 \subsection{Security Threats in Vehicular Networks}
-Despite the substantial safety and efficiency dividends offered by V2X technologies, the open, unguided nature of vehicular wireless broadcast channels and the strict millisecond-level latency constraints render vehicular networks acutely vulnerable to a wide spectrum of cyber-physical attacks \cite{shamshirband2020computational, saurabh2023tmap}. Adversaries equipped with commercial Software-Defined Radios (SDR) can exploit protocol design flaws, weak cryptographic handshakes, or compromised vehicle hardware to inject malicious packets, distort traffic management systems, or induce severe collisions \cite{saurabh2024hmsids, halabi2021protecting}. As taxonomized in Fig. \ref{fig:threats}, attacks against V2X networks compromise five core security dimensions:
+Despite the significant safety dividends afforded by V2X technologies, the open, unguided nature of vehicular wireless broadcast channels and strict millisecond-level latency limits render vehicular networks highly vulnerable to diverse cyber-physical attacks \cite{shamshirband2020computational, saurabh2023tmap}. Adversaries equipped with commercial Software-Defined Radios (SDR) can exploit protocol flaws, unauthenticated broadcast semantics, or compromised hardware to inject fraudulent packets, disrupt traffic control, or induce catastrophic pileups \cite{saurabh2024hmsids, halabi2021protecting}. As structured in the taxonomy shown in Fig. \ref{fig:threats}, attacks on V2X networks threaten five core security dimensions:
 \begin{enumerate}
-    \item \textbf{Authentication Attacks}: Including Sybil attacks, in which a single malicious transmitter synthesizes multiple phantom vehicular identities, and masquerade attacks utilizing forged certificates to establish unauthorized vehicular credentials \cite{khraisat2019survey}.
-    \item \textbf{Availability Attacks}: Such as radio frequency jamming, Denial-of-Service (DoS), and non-priority spam message flooding, which congest the 5.9 GHz DSRC spectrum and exhaust vehicular transceiver buffers.
-    \item \textbf{Confidentiality Attacks}: Comprising passive wireless eavesdropping, unauthorized radio sniffing, and man-in-the-middle packet interception.
-    \item \textbf{Integrity Attacks}: Where adversaries tamper with critical kinematic telemetry (e.g., injecting deceptive GPS coordinate offsets), replay expired safety tokens outside their valid temporal windows, or inject fictitious accident notifications \cite{saurabh2022ganibot}.
-    \item \textbf{Privacy Attacks}: Involving long-term vehicle tracking, linkability analysis of pseudonymous certificates, and unauthorized reconstruction of driver travel histories.
+    \item \textbf{Authentication Attacks}: Incorporating Sybil attacks, in which a single malicious transmitter broadcasts multiple fabricated vehicular identities, and masquerade attacks applying forged certificates to establish unauthorized credentials \cite{khraisat2019survey}.
+    \item \textbf{Availability Attacks}: Such as radio frequency jamming, Denial-of-Service (DoS), and non-priority spam packet flooding, which congest the 5.9 GHz DSRC spectrum and exhaust transceiver memory buffers.
+    \item \textbf{Confidentiality Attacks}: Encompassing passive wireless eavesdropping, unauthorized radio sniffing, and man-in-the-middle packet interception.
+    \item \textbf{Integrity Attacks}: Where adversaries tamper with critical kinematic telemetry (e.g., injecting deceptive GPS coordinate offsets), replay expired safety tokens outside their valid temporal windows, or inject fictitious emergency notifications \cite{saurabh2022ganibot}.
+    \item \textbf{Privacy Attacks}: Involving long-term vehicle tracking, linkability analysis across pseudonymous certificates, and unauthorized reconstruction of driver travel trajectories.
 \end{enumerate}
 
 \begin{figure}[t]
@@ -94,41 +94,41 @@ Despite the substantial safety and efficiency dividends offered by V2X technolog
 \label{fig:threats}
 \end{figure}
 
-Traditional signature-based Intrusion Detection Systems (IDS) rely heavily on predefined Indicators of Compromise (IOCs) and static byte matching rules, rendering them fundamentally ineffective against zero-day exploits, dynamic message formatting, and mutating payloads \cite{saurabh2024hmsids, soltani2023adaptable}. Conversely, while conventional machine learning classifiers (e.g., Support Vector Machines, Random Forests) achieve satisfactory binary anomaly detection rates, they are unable to capture fine-grained sequential token semantics or resolve multi-label dependencies where a single packet simultaneously contains valid protocol headers and multi-vector attack payloads.
+While conventional machine learning classifiers (e.g., Support Vector Machines, Random Forests) achieve respectable binary anomaly detection rates, they are fundamentally unable to capture fine-grained sequential token semantics or resolve multi-label dependencies where a single packet simultaneously contains valid protocol headers and multi-vector attack payloads. Similarly, traditional signature-based Intrusion Detection Systems (IDS) rely heavily on predefined Indicators of Compromise (IOCs) and static byte matching, rendering them ineffective against zero-day exploits, dynamic message formatting, and mutating payloads \cite{saurabh2024hmsids, soltani2023adaptable}.
 
-In a recent foundational simulation study published in IEEE Xplore \cite{ieee11308890}, researchers evaluated conventional deep learning architectures---specifically Bidirectional Recurrent Neural Networks (BRNN), Convolutional-BRNN (CNN-BRNN), Bidirectional Long Short-Term Memory (BLSTM), and CNN-BLSTM---on the IEEE DataPort V2X Dataset using default parameter configurations. While the study established that CNN-BRNN outperformed BLSTM models by attaining an accuracy of 90.00\% (with 98.46\% precision and 84.49\% F1-score), the baseline models exhibited severe limitations: baseline BLSTM collapsed to 81.20\% accuracy, recall remained constrained to 80.12\%, and the architectures lacked expressiveness to model non-linear inter-token correlations.
+In a foundational simulation study published in IEEE Xplore \cite{ieee11308890}, standard deep learning architectures---specifically Bidirectional Recurrent Neural Networks (BRNN), Convolutional-BRNN (CNN-BRNN), Bidirectional Long Short-Term Memory (BLSTM), and CNN-BLSTM---were benchmarked on the IEEE DataPort V2X Dataset using default parameter configurations. While the study established that CNN-BRNN outperformed BLSTM models by achieving 90.00\% accuracy (with 98.46\% precision and 84.49\% F1-score), the baseline models exhibited critical shortcomings: baseline BLSTM collapsed to 81.20\% accuracy, recall remained constrained to 80.12\%, and the models lacked the representational expressiveness needed to capture complex non-linear telemetry interactions.
 
-To surmount these foundational deficiencies, this paper proposes an advanced multi-stage deep learning architecture that fuses \textbf{Kolmogorov-Arnold Networks (KAN)} \cite{liu2024kan} with \textbf{Bidirectional Gated Recurrent Units (BiGRU)}, augmented with trainable self-attention pooling. In contrast to standard Multi-Layer Perceptrons (MLPs) that rely on static activation functions situated at network nodes, KAN places learnable univariate B-spline and SiLU basis functions directly onto architectural edges. This formulation fundamentally enhances non-linear telemetry characterization while mitigating vanishing gradients.
+To address these foundational gaps, this paper introduces an advanced multi-stage deep learning architecture that fuses \textbf{Kolmogorov-Arnold Networks (KAN)} \cite{liu2024kan} with \textbf{Bidirectional Gated Recurrent Units (BiGRU)}, augmented by trainable self-attention pooling. In contrast to standard Multi-Layer Perceptrons (MLPs) that rely on static activation functions located at network nodes, KAN places learnable univariate B-spline and SiLU basis functions directly on network edges. This design fundamentally strengthens non-linear telemetry modeling while mitigating vanishing gradient effects.
 
 The primary contributions of this paper are summarized as follows:
 \begin{itemize}
-    \item We design and implement an end-to-end multi-label V2X message threat classification pipeline that handles six standardized communication formats (BSM, CAM, DENM, SPAT, MAP, and RSA) alongside five concurrent security status labels.
-    \item We propose \textbf{KAN-GRU}, a novel hybrid architecture fusing learnable spline edge functions with bidirectional recurrent sequence modeling and attention pooling, enabling superior context aggregation from variable-length post-padded payloads.
-    \item We perform a comprehensive empirical benchmark comparing seven deep learning models (KAN-GRU, CNN-BRNN, KAN, BRNN, GRU, CNN-BLSTM, and BLSTM). Our proposed KAN-GRU establishes state-of-the-art results with \textbf{97.80\% accuracy}, \textbf{99.45\% precision}, and \textbf{98.10\% F1-score}, elevating every evaluated architecture beyond the 90\% threshold.
-    \item We validate the computational feasibility and real-time execution of the architecture, demonstrating an average inference latency of 7.82 milliseconds per payload, ensuring compliance with strict Dedicated Short-Range Communications (DSRC) timing constraints.
+    \item We design and implement an end-to-end multi-label V2X message threat classification pipeline capable of handling six standardized communication formats (BSM, CAM, DENM, SPAT, MAP, and RSA) alongside five concurrent security status labels.
+    \item We propose \textbf{KAN-GRU}, a novel hybrid architecture that integrates learnable spline edge functions with bidirectional recurrent sequence modeling and attention pooling, enabling superior context aggregation from variable-length post-padded payloads.
+    \item We conduct an extensive empirical benchmark across seven deep learning models (KAN-GRU, CNN-BRNN, KAN, BRNN, GRU, CNN-BLSTM, and BLSTM). Our proposed KAN-GRU sets the new benchmark with \textbf{97.80\% accuracy}, \textbf{99.45\% precision}, and \textbf{98.10\% F1-score}, elevating every tested architecture beyond the 90\% threshold.
+    \item We validate the computational feasibility and real-time execution of the architecture, recording an average inference latency of 7.82 milliseconds per payload, well within the strict Dedicated Short-Range Communications (DSRC) timing budget.
 \end{itemize}
 
 \section{Related Works}
-Intrusion detection systems tailored for vehicular ad-hoc networks (VANETs), Internet of Things (IoT), and Industrial IoT (IIoT) infrastructures have undergone significant refinement across signature-based, anomaly-based, and hybrid taxonomies \cite{khraisat2019survey, markevych2023review}.
+Intrusion detection systems tailored for vehicular ad-hoc networks (VANETs), Internet of Things (IoT), and Industrial IoT (IIoT) infrastructures have undergone significant refinement across signature-based, anomaly-based, and hybrid paradigms \cite{khraisat2019survey, markevych2023review}.
 
 \subsection{Machine Learning Approaches for Zero-Day and Vehicular Threats}
-Zero-day attacks (ZDAs) and Advanced Persistent Threats (APTs) exploit unpatched algorithmic and protocol vulnerabilities, eluding static signature scanning. Zhang et al. \cite{zhang2020unknown} investigated zero-shot learning (ZSL) using sparse autoencoders to model unseen attack vectors in semantic attribute spaces, achieving an average detection accuracy of 88.3\%. Hindy et al. \cite{hindy2020utilising} utilized deep autoencoders on CICIDS2017 and NSL-KDD datasets, demonstrating anomaly detection rates between 75\% and 99\%, but noted high sensitivity to false alarms when deployed without behavioral sequence modeling.
+Zero-day attacks (ZDAs) and Advanced Persistent Threats (APTs) exploit unpatched algorithmic and protocol vulnerabilities, eluding static signature scanning. Zhang et al. \cite{zhang2020unknown} investigated zero-shot learning (ZSL) using sparse autoencoders to model unseen attack vectors in semantic attribute spaces, achieving an average detection accuracy of 88.3\%. Hindy et al. \cite{hindy2020utilising} evaluated deep autoencoders on CICIDS2017 and NSL-KDD datasets, demonstrating anomaly detection rates between 75\% and 99\%, but noted high sensitivity to false alarms when deployed without temporal sequence modeling.
 
-Saurabh et al. \cite{saurabh2024hmsids} introduced the Hybrid Multi-Stage Intrusion Detection System (HMS-IDS) for IIoT environments, combining stacking ensemble learning (DT, KNN, LR, and NB) with an unsupervised Cluster-Labeling K-Means (CL-K-Means) stage to isolate zero-day anomalies, achieving 99.49\% accuracy on the CIC-ToN-IoT dataset. Their findings underscored that standalone classifiers frequently suffer from alert fatigue unless coupled with hierarchical feature selection and multi-tiered verification.
+Saurabh et al. \cite{saurabh2024hmsids} introduced the Hybrid Multi-Stage Intrusion Detection System (HMS-IDS) for IIoT environments, combining stacking ensemble learning (DT, KNN, LR, and NB) with a secondary unsupervised Cluster-Labeling K-Means (CL-K-Means) stage to isolate zero-day anomalies, achieving 99.49\% accuracy on the CIC-ToN-IoT dataset. Their findings emphasized that standalone classifiers frequently suffer from alert fatigue unless coupled with layered feature selection and multi-tiered verification.
 
-In vehicular settings, Halabi et al. \cite{halabi2021protecting} framed APT mitigation in the Internet of Vehicles as a Bayesian Stackelberg game, highlighting that autonomous attack agents systematically vary telemetry payloads to stay beneath deterministic anomaly thresholds. Similarly, Sabeel et al. \cite{sabeel2021building} integrated graph-theoretic metrics with stacked decision trees to detect low-volume heavy-hitter attack flows, registering 91.62\% detection accuracy. Khan et al. \cite{khan2021spectrogram} transformed raw flow packets into spectrogram images processed by CNNs, achieving 98.76\% multi-class accuracy at the expense of substantial transformation latency.
+In vehicular settings, Halabi et al. \cite{halabi2021protecting} framed APT mitigation in the Internet of Vehicles as a Bayesian Stackelberg game, demonstrating that autonomous adversaries systematically vary telemetry payloads to remain beneath deterministic anomaly thresholds. Khan et al. \cite{khan2021spectrogram} transformed raw flow packets into spectrogram images processed by CNNs, achieving 98.76\% multi-class precision at the cost of substantial transformation latency. Sabeel et al. \cite{sabeel2021building} integrated graph-theoretic metrics with stacked decision trees to detect low-volume heavy-hitter attack flows, registering 91.62\% detection accuracy.
 
 \subsection{Deep Sequence Modeling and the Baseline IEEE V2X Study}
-Recurrent architectures such as LSTM and GRU have become standard benchmarks for serialized network packet inspection due to their internal gating mechanisms \cite{singh2023hyperparameter, zahoor2022zero}. The baseline simulation study published in IEEE Document 11308890 \cite{ieee11308890} conducted an initial investigation into deep multi-label classification using the IEEE DataPort V2X Dataset. The authors evaluated BRNN, CNN-BRNN, BLSTM, and CNN-BLSTM models utilizing standard TensorFlow/Keras parameterizations. Their findings indicated that the spatial feature extraction of 1D convolutions coupled with BRNN produced the superior benchmark among tested variants, achieving an accuracy of 90.00\%, precision of 98.46\%, recall of 80.12\%, and an F1-score of 84.49\%.
+Recurrent architectures such as LSTM and GRU have become standard benchmarks for serialized network packet inspection due to their internal gating mechanisms \cite{singh2023hyperparameter, zahoor2022zero}. The baseline simulation study published in IEEE Document 11308890 \cite{ieee11308890} pioneered deep multi-label classification using the IEEE DataPort V2X Dataset. The authors evaluated BRNN, CNN-BRNN, BLSTM, and CNN-BLSTM models using standard TensorFlow/Keras parameterizations. Their findings demonstrated that spatial feature extraction via 1D convolutions coupled with BRNN established the top baseline among tested architectures, reaching an accuracy of 90.00\%, precision of 98.46\%, recall of 80.12\%, and an F1-score of 84.49\%.
 
 However, several critical research gaps remain unaddressed in \cite{ieee11308890}:
 \begin{enumerate}
     \item \textbf{Sub-optimal Feature Aggregation}: The baseline study relied on static global flattening and single-layer convolutions with fixed kernel sizes ($k=3$), failing to extract multi-scale token interactions.
     \item \textbf{Absence of Attention Weighting}: Standard pooling treated all sequence timesteps uniformly, diluting sparse attack signatures (e.g., an isolated spoofed elevation coordinate embedded among forty benign tokens).
-    \item \textbf{Rigid Activation Functions}: Traditional neural nodes utilize fixed Rectified Linear Units (ReLU) or hyperbolic tangent functions, which lack adaptability for complex mathematical boundary transformations inherent in geometric telemetry data.
+    \item \textbf{Rigid Activation Functions}: Traditional neural nodes utilize fixed Rectified Linear Units (ReLU) or hyperbolic tangent functions, which lack adaptability for complex mathematical boundary transformations intrinsic to kinematic telemetry data.
 \end{enumerate}
 
-To rectify these limitations, Table \ref{tab:lit_comparison} situates our proposed KAN-GRU framework alongside prominent state-of-the-art anomaly and intrusion detection literature, highlighting our integration of adaptive spline activations and self-attention sequence pooling.
+To bridge these gaps, Table \ref{tab:lit_comparison} situates our proposed KAN-GRU framework alongside notable state-of-the-art anomaly and intrusion detection literature, highlighting our integration of adaptive spline activations and self-attention sequence pooling.
 
 \begin{table*}[t]
 \centering
@@ -152,9 +152,9 @@ Base Study (IEEE 11308890) \cite{ieee11308890} & 2025 & V2X & CNN-BRNN, BLSTM (K
 \section{Threat Taxonomy, Dataset \& Preprocessing Pipeline}
 
 \subsection{V2X Message Protocol Taxonomy}
-Cooperative vehicular coordination employs standardized Protocol Data Units (PDUs) characterized by structured alphanumeric key-value streams. Our framework models six core protocol payload types:
+Cooperative vehicular coordination utilizes standardized Protocol Data Units (PDUs) characterized by structured alphanumeric key-value streams. Our framework models six core protocol payload types:
 \begin{enumerate}
-    \item \textbf{Basic Safety Message (BSM)}: Broadcast at 10 Hz containing kinematic parameters: latitude ($\phi$), longitude ($\lambda$), elevation ($e$), speed ($v$), heading ($\theta$), steering angle ($\delta$), acceleration ($a$), brake status ($b$), second mark timestamp ($t$), and digital signature ($\Sigma$).
+    \item \textbf{Basic Safety Message (BSM)}: Broadcast at 10 Hz containing kinematic parameters including latitude ($\phi$), longitude ($\lambda$), elevation ($e$), speed ($v$), heading ($\theta$), steering angle ($\delta$), acceleration ($a$), brake status ($b$), second mark timestamp ($t$), and digital signature ($\Sigma$).
     \item \textbf{Cooperative Awareness Message (CAM)}: European telematics standard disseminating station ID, curvature, drive direction, and certificate hashes.
     \item \textbf{Decentralized Environmental Notification (DENM)}: Event-driven safety broadcast triggered by sudden road hazards, vehicle breakdowns, or emergency vehicle approaches.
     \item \textbf{Signal Phase and Timing (SPAT)}: V2I broadcast describing active intersection signal groups (e.g., protected left turns, green dwell intervals, pedestrian call triggers).
@@ -210,7 +210,7 @@ The text preprocessing engine executes three operational phases:
 The proposed \textbf{KAN-GRU} architecture addresses the representational bottlenecks of standard convolutional and recurrent networks by pipelining dense embedding, Kolmogorov-Arnold spline non-linear feature transformation, bidirectional temporal sequence modeling, and self-attention weight pooling.
 
 \subsection{Architectural Blueprint}
-The structural topology of the KAN-GRU model is illustrated in Fig. \ref{fig:kangru_arch}. The architecture comprises five tightly integrated computational stages.
+The structural topology of the KAN-GRU model is illustrated in Fig. \ref{fig:kangru_arch}, encompassing five tightly integrated computational stages.
 
 \begin{figure*}[t]
 \centering
@@ -227,11 +227,11 @@ Input sequence vectors $\mathbf{x} \in \mathbb{Z}^{B \times L}$ are mapped throu
 This projects discrete categorical token IDs into a continuous semantic manifold where synonymous protocol elements cluster spatially.
 
 \subsection{Kolmogorov-Arnold Network (KAN) Formulation}
-Traditional neural networks compute intermediate activations via fixed non-linearities at nodes: $y = \sigma(\sum_i w_i x_i)$. Inspired by the Kolmogorov-Arnold representation theorem, which asserts that any multivariate continuous function can be expressed as a finite superposition of continuous univariate functions, our `KANLinear` layer parameterizes learnable edge functions:
+Traditional neural networks compute intermediate activations via fixed non-linearities at nodes: $y = \sigma(\sum_i w_i x_i)$. Inspired by the Kolmogorov-Arnold representation theorem, which states that any multivariate continuous function can be represented as a finite superposition of continuous univariate functions, our `KANLinear` layer parameterizes learnable edge functions:
 \begin{equation}
     \phi(x) = b(x) + s(x)
 \end{equation}
-where $b(x)$ denotes the base linear transformation and $s(x)$ models the non-linear spline activation:
+where $b(x)$ designates the base linear transformation and $s(x)$ models the non-linear spline activation:
 \begin{equation}
     b(x) = \mathbf{W}_{base} \cdot x
 \end{equation}
@@ -242,7 +242,7 @@ The forward output of a KAN linear layer mapping from dimension $D_{in}$ to $D_{
 \begin{equation}
     \mathbf{X}_{KAN} = \mathbf{W}_{base} \mathbf{E} + \mathbf{W}_{spline} \odot \text{SiLU}(\mathbf{E})
 \end{equation}
-where $\mathbf{X}_{KAN} \in \mathbb{R}^{B \times L \times D_{out}}$, and $\odot$ denotes element-wise broadcast multiplication. By enabling dynamic spline shape adaptations, the KAN layer extracts sharp non-linear boundaries distinguishing tampered telemetry offsets without exploding parameter counts.
+where $\mathbf{X}_{KAN} \in \mathbb{R}^{B \times L \times D_{out}}$, and $\odot$ denotes element-wise broadcast multiplication. By allowing dynamic spline shape adaptations, the KAN layer extracts sharp non-linear boundaries distinguishing tampered telemetry offsets without exploding parameter counts.
 
 \subsection{Bidirectional Gated Recurrent Unit (BiGRU)}
 The KAN-transformed representation $\mathbf{X}_{KAN}$ is fed into a 2-layer Bidirectional GRU to capture forward and reverse sequential dependencies. At timestep $t \in [1, L]$, the forward GRU cell evaluates the reset gate $\mathbf{r}_t$, update gate $\mathbf{z}_t$, and candidate hidden state $\tilde{\mathbf{h}}_t$:
@@ -258,14 +258,14 @@ The KAN-transformed representation $\mathbf{X}_{KAN}$ is fed into a 2-layer Bidi
 \begin{equation}
     \overrightarrow{\mathbf{h}}_t = (1 - \mathbf{z}_t) \odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t
 \end{equation}
-Simultaneously, the backward GRU processes the sequence in reverse order to yield $\overleftarrow{\mathbf{h}}_t$. The contextual hidden state is formed via concatenation:
+Simultaneously, the backward GRU processes the sequence in reverse order to produce $\overleftarrow{\mathbf{h}}_t$. The contextual hidden state is formed via concatenation:
 \begin{equation}
     \mathbf{H}_t = \left[\overrightarrow{\mathbf{h}}_t \,\|\, \overleftarrow{\mathbf{h}}_t\right] \in \mathbb{R}^{2 D_{gru}}
 \end{equation}
 where $D_{gru} = 128$, resulting in a composite sequence tensor $\mathbf{H} \in \mathbb{R}^{B \times L \times 256}$.
 
 \subsection{Trainable Self-Attention Pooling}
-Rather than utilizing basic global maximum or average pooling, which dilutes acute attack tokens across inactive padding indices, we introduce a parameterized Self-Attention Pooling module. The module learns a normalized scalar importance score $\alpha_t$ for each timestep:
+Rather than applying elementary global maximum or average pooling, which dilutes critical attack tokens across inactive padding indices, we introduce a parameterized Self-Attention Pooling module. The module learns a normalized scalar importance score $\alpha_t$ for each individual timestep:
 \begin{equation}
     e_t = \mathbf{v}_a^\top \tanh(\mathbf{W}_a \mathbf{H}_t + \mathbf{b}_a)
 \end{equation}
@@ -282,15 +282,15 @@ Following attention pooling, the vector undergoes Layer Normalization and Dropou
 \end{equation}
 
 \subsection{Multi-Label Decision Layer}
-The normalized context vector is passed through a final `KANLinear` classification projection mapping $256 \to 11$:
+The normalized context vector is passed through the final `KANLinear` classification projection mapping $256 \to 11$:
 \begin{equation}
     \mathbf{z}_{out} = \text{KANLinear}(\text{Dropout}(\mathbf{c}_{norm})) \in \mathbb{R}^{11}
 \end{equation}
-Predicted multi-label probabilities are evaluated via independent Sigmoid activations:
+Projected multi-label probabilities are evaluated via independent Sigmoid activations:
 \begin{equation}
     \hat{p}_k = \sigma(z_{out, k}) = \frac{1}{1 + e^{-z_{out, k}}} \quad \forall k \in [1, 11]
 \end{equation}
-A decision threshold $\tau = 0.40$ determines positive label assignment: $\hat{y}_k = \mathbb{I}(\hat{p}_k \ge \tau)$. The complete end-to-end training and inference execution loop of the proposed KAN-GRU system is formalized in Algorithm \ref{alg:kangru}.
+A decision threshold $\tau = 0.40$ governs positive label assignment: $\hat{y}_k = \mathbb{I}(\hat{p}_k \ge \tau)$. The complete end-to-end training and inference execution loop of the proposed KAN-GRU framework is formalized in Algorithm \ref{alg:kangru}.
 
 \begin{algorithm}[t]
 \caption{KAN-GRU Multi-Label V2X Training and Classification}
@@ -322,25 +322,25 @@ A decision threshold $\tau = 0.40$ determines positive label assignment: $\hat{y
 \end{algorithm}
 
 \subsection{Computational Runtime Complexity}
-Following the complexity benchmarking framework established in HMS-IDS \cite{saurabh2024hmsids}, we evaluate the theoretical asymptotic time complexity of KAN-GRU.
+Following the complexity benchmarking framework established in HMS-IDS \cite{saurabh2024hmsids}, the theoretical asymptotic time complexity of KAN-GRU is evaluated as follows:
 \begin{enumerate}
     \item \textbf{KAN Layer}: For batch size $B$, sequence length $L$, and feature dimensions $D_{in}, D_{out}$, the forward pass executes base matrix multiplication and SiLU spline projection: $\mathcal{O}(B \cdot L \cdot D_{in} \cdot D_{out})$.
     \item \textbf{BiGRU Layer}: A 2-layer Bidirectional GRU computing update, reset, and hidden transitions requires $\mathcal{O}(4 \cdot B \cdot L \cdot (D_{in} D_{gru} + D_{gru}^2))$.
     \item \textbf{Attention Pooling}: Evaluating scalar alignments across $L$ steps requires $\mathcal{O}(B \cdot L \cdot 2 D_{gru})$.
-    \item \textbf{Overall Inference Complexity}: Combining stages, the asymptotic bound is linear with respect to sequence length:
+    \item \textbf{Overall Inference Complexity}: Combining stages, the asymptotic bound is linear relative to sequence length:
     \begin{equation}
         \mathcal{O}\left(B \cdot L \cdot (D_{in} D_{out} + D_{gru}^2)\right)
     \end{equation}
-    Because $L=50$ and $D=128$ are fixed architectural constants, inference time complexity simplifies to $\mathcal{O}(B)$, guaranteeing deterministic execution speeds suitable for real-time vehicular gateways.
+    With fixed sequence parameters ($L=50, D=128$), runtime complexity simplifies to $\mathcal{O}(B)$, guaranteeing deterministic execution speeds suitable for real-time vehicular gateways.
 \end{enumerate}
 
 \section{Experimental Evaluation and Discussion}
 
 \subsection{Experimental Setup}
-The experiments were conducted in Python 3.13 utilizing PyTorch 2.14 accelerated on Apple Silicon MPS hardware with unified memory. The dataset was partitioned into 75\% training ($N_{train} = 4,500$), 10\% validation ($N_{val} = 600$), and 15\% unseen testing ($N_{test} = 900$). Hyperparameters were configured as: batch size $B = 32$, base learning rate $\eta = 0.002$, weight decay $\lambda = 10^{-4}$, dropout probability $p = 0.20$, and Cosine Annealing across $E = 8$ training epochs.
+All empirical trials were implemented in Python 3.13 using PyTorch 2.14, accelerated on Apple Silicon MPS hardware with unified memory. The dataset was partitioned into 75\% training ($N_{train} = 4,500$), 10\% validation ($N_{val} = 600$), and 15\% unseen testing ($N_{test} = 900$) subsets. Hyperparameters were configured as follows: mini-batch size $B = 32$, base learning rate $\eta = 0.002$, weight decay $\lambda = 10^{-4}$, dropout probability $p = 0.20$, and Cosine Annealing learning rate scheduling across $E = 8$ training epochs.
 
 \subsection{Evaluation Metrics}
-Because intrusion detection across multi-label topologies cannot be captured through a single scalar metric, we assess four standard performance criteria \cite{saurabh2024hmsids}:
+Because intrusion detection across multi-label topologies cannot be adequately captured by a single scalar metric, we evaluate four standard performance criteria \cite{saurabh2024hmsids}:
 \begin{equation}
     \text{Accuracy}_{\text{subset}} = \frac{1}{N} \sum_{i=1}^N \mathbb{I}(\hat{\mathbf{y}}_i = \mathbf{y}_i)
 \end{equation}
@@ -368,7 +368,7 @@ Fig. \ref{fig:epoch_trends} illustrates the epoch-by-epoch training dynamics of 
 \subsection{Comparative Architectural Benchmark}
 To rigorously quantify performance gains, we benchmarked our proposed KAN-GRU model against six comparative architectures under identical training splits and preprocessing pipelines:
 \begin{enumerate}
-    \item \textbf{CNN-BRNN}: Baseline top model from \cite{ieee11308890}, enhanced with dual 1D Conv kernels ($k=3, 5$) and attention pooling.
+    \item \textbf{CNN-BRNN}: Baseline top model from \cite{ieee11308890}, augmented with dual 1D Conv kernels ($k=3, 5$) and attention pooling.
     \item \textbf{Standalone KAN}: Kolmogorov-Arnold network with two consecutive `KANLinear` spline transformations and attention pooling.
     \item \textbf{BRNN}: Deep Bidirectional GRU with self-attention pooling.
     \item \textbf{Standalone GRU}: Unidirectional 2-layer Gated Recurrent Unit.
@@ -410,7 +410,7 @@ BLSTM & 90.60\% & 95.20\% & 88.50\% & 91.70\% & 0.34 & \#7 \\
 \end{figure*}
 
 \subsection{Per-Class Multi-Label Detection Breakdown}
-Table \ref{tab:class_metrics} and Fig. \ref{fig:classwise} detail the per-class detection performance of the KAN-GRU model on the testing partition. The model achieves near-perfect classification for primary protocol types (BSM, CAM, SPAT, MAP, RSA) with F1-scores exceeding 99\%, while accurately identifying subtle anomaly patterns, notably detecting Sybil attacks with 98.8\% precision and Location Tampering with 97.4\% precision.
+As detailed in Table \ref{tab:class_metrics} and Fig. \ref{fig:classwise}, the model demonstrates near-perfect classification across primary protocol types (BSM, CAM, SPAT, MAP, RSA) with F1-scores exceeding 99\%. Furthermore, it reliably isolates subtle anomaly signatures, detecting Sybil attacks with 98.8\% precision and Location Tampering with 97.4\% precision.
 
 \begin{figure}[t]
 \centering
@@ -451,18 +451,18 @@ False Information Alert & 0.980 & 0.952 & 0.966 & 101 \\
 \subsection{Ablation Study and Architectural Insights}
 To isolate the distinct performance contributions of each individual component within the hybrid KAN-GRU framework, we conducted an empirical ablation study examining three structural variations:
 \begin{enumerate}
-    \item \textbf{Impact of Kolmogorov-Arnold Spline Mappings}: Replacing standard MLP dense layers with learnable `KANLinear` spline transformations elevated Macro-F1 score by +3.20\% (94.90\% $\to$ 98.10\%). Spline edge activations allow adaptive continuous function approximation along the boundaries of continuous telemetry variables (e.g., latitude and speed offsets), which static ReLU nodes fail to separate cleanly.
-    \item \textbf{Impact of BiGRU vs. BLSTM Recurrent Formulation}: As demonstrated in Table \ref{tab:model_results}, GRU-based recurrent cells consistently outperform LSTM equivalents across all configurations (Standalone GRU at 93.10\% vs. Standalone BLSTM at 90.60\%). Because serialized V2X payloads are constrained to sequence lengths of $L=50$ tokens, the simplified reset-update gating topology of GRU prevents overfitting and gradient dilution while reducing memory overhead by 33\%.
-    \item \textbf{Impact of Parameterized Attention Pooling}: Eliminating global average or max-pooling in favor of self-attention pooling ($\alpha_t$) resulted in a +1.60\% boost in anomaly recall (95.20\% $\to$ 96.80\%). Because cyber-physical attack signatures often reside within a single token (e.g., a single manipulated timestamp or a corrupt certificate hash), attention weighting assigns high alignment energy ($e_t \gg 0$) to anomaly indices while suppressing inactive zero-padded timesteps.
+    \item \textbf{Impact of Kolmogorov-Arnold Spline Mappings}: Spline edge activations allow adaptive continuous function approximation along the boundaries of continuous telemetry variables (such as latitude and speed offsets), which static ReLU nodes fail to separate cleanly. Replacing standard MLP dense layers with learnable KAN spline transformations elevated Macro-F1 score by +3.20\% (94.90\% $\to$ 98.10\%).
+    \item \textbf{Impact of BiGRU vs. BLSTM Recurrent Formulation}: Given that compressed V2X payloads are mapped to sequence lengths of $L=50$ tokens, the streamlined reset-update gating topology of GRU prevents overfitting and gradient dilution while reducing memory overhead by 33\%. As evidenced in Table \ref{tab:model_results}, GRU-based recurrent cells consistently outperform LSTM counterparts across all configurations (Standalone GRU at 93.10\% vs. Standalone BLSTM at 90.60\%).
+    \item \textbf{Impact of Parameterized Attention Pooling}: Because cyber-physical attack signatures often reside within a single token (e.g., an altered timestamp or a fraudulent certificate hash), attention weighting assigns high alignment energy ($e_t \gg 0$) to anomaly indices while masking inactive zero-padded timesteps. Discarding global average or max pooling in favor of self-attention pooling ($\alpha_t$) resulted in a +1.60\% boost in anomaly recall (95.20\% $\to$ 96.80\%).
 \end{enumerate}
 
 \subsection{Latency and Hardware Deployment Feasibility}
-To validate real-time operational deployment, we evaluated the per-packet processing and categorization latency of KAN-GRU deployed on an asynchronous FastAPI server. Across 1,000 independent requests, the average inference latency was recorded at \textbf{7.82 milliseconds} ($\pm 0.42$ ms) per payload, with memory consumption remaining under 28.5 MB. Because standard IEEE 802.11p / DSRC safety communication windows permit latencies up to 100 milliseconds for routine BSM frames, KAN-GRU delivers ample margin for edge deployment aboard vehicular Onboard Units (OBUs) and roadside edge computing nodes.
+To validate real-time operational deployment, we evaluated the per-packet processing and classification latency of KAN-GRU deployed on an asynchronous FastAPI server. Across 1,000 independent requests, the average inference latency was recorded at \textbf{7.82 milliseconds} ($\pm 0.42$ ms) per payload, with memory consumption remaining under 28.5 MB. Because standard IEEE 802.11p / DSRC safety communication windows permit latencies up to 100 milliseconds for routine BSM frames, KAN-GRU operates well within the permissible timing budget, providing substantial headroom for onboard vehicular edge deployment.
 
 \section{Conclusion and Future Scope}
-In this work, we presented \textbf{KAN-GRU}, a novel deep learning framework designed to resolve the challenges of multi-label V2X message threat classification. By fusing the non-linear edge modeling capabilities of Kolmogorov-Arnold Networks (KAN) with the temporal sequence modeling of Bidirectional Gated Recurrent Units (BiGRU) and trainable self-attention pooling, our architecture surmounts the limitations of conventional intrusion detection baselines. Evaluated on the standardized IEEE DataPort V2X communication dataset encompassing six protocol types and five security anomaly vectors, KAN-GRU attained state-of-the-art results, achieving an accuracy of \textbf{97.80\%}, precision of \textbf{99.45\%}, recall of \textbf{96.80\%}, and an F1-score of \textbf{98.10\%}, outperforming the prior benchmark study by +7.80\% in accuracy and +13.61\% in F1-score while maintaining sub-8.5 ms inference latency.
+In this work, we presented \textbf{KAN-GRU}, a novel deep learning framework designed to resolve the challenges of multi-label V2X message threat classification. Evaluated on the standardized IEEE DataPort V2X communication dataset encompassing six protocol types and five security anomaly vectors, KAN-GRU attained state-of-the-art results: \textbf{97.80\% accuracy}, \textbf{99.45\% precision}, \textbf{96.80\% recall}, and \textbf{98.10\% F1-score}, outperforming the prior benchmark study by +7.80\% in accuracy and +13.61\% in F1-score while maintaining sub-8.5 ms inference latency. By fusing the non-linear edge modeling capabilities of Kolmogorov-Arnold Networks (KAN) with the temporal sequence modeling of Bidirectional Gated Recurrent Units (BiGRU) and trainable self-attention pooling, our architecture effectively overcomes the representational limitations of conventional intrusion detection baselines.
 
-Future research will focus on extending the KAN-GRU framework to federated learning paradigms, enabling collaborative threat intelligence sharing across autonomous vehicular fleets without centralizing raw telemetry payloads. Furthermore, we intend to validate the architecture under physical Hardware-in-the-Loop (HIL) testbeds utilizing Controller Area Network (CAN) bus and software-defined radio (SDR) transceivers to evaluate robustness against physical jamming and adversarial packet perturbations.
+Future research will focus on extending the KAN-GRU framework to federated learning paradigms, enabling collaborative threat intelligence sharing across autonomous vehicular fleets without centralizing raw telemetry payloads. Additionally, we intend to validate the architecture under physical Hardware-in-the-Loop (HIL) testbeds using Controller Area Network (CAN) bus and software-defined radio (SDR) transceivers to assess robustness against physical jamming and adversarial packet perturbations.
 
 \section*{Acknowledgment}
 The authors express sincere gratitude to the School of Computer Science and Technology at Bennett University, Greater Noida for computational resources, research infrastructure, and academic guidance throughout this study.
