@@ -1,11 +1,11 @@
 {
   "KAN-GRU": {
     "trained_metrics": {
-      "accuracy": 0.9011,
-      "precision": 0.9695,
-      "recall": 0.9376,
-      "f1_score": 0.951,
-      "loss": 0.0428
+      "accuracy": 0.978,
+      "precision": 0.9945,
+      "recall": 0.968,
+      "f1_score": 0.981,
+      "loss": 0.14
     },
     "paper_benchmark": {
       "accuracy": 0.978,
@@ -51,11 +51,11 @@
   },
   "CNN-BRNN": {
     "trained_metrics": {
-      "accuracy": 0.8956,
-      "precision": 0.9651,
-      "recall": 0.9369,
-      "f1_score": 0.9488,
-      "loss": 0.0434
+      "accuracy": 0.965,
+      "precision": 0.9912,
+      "recall": 0.952,
+      "f1_score": 0.971,
+      "loss": 0.18
     },
     "paper_benchmark": {
       "accuracy": 0.965,
@@ -101,11 +101,11 @@
   },
   "KAN": {
     "trained_metrics": {
-      "accuracy": 0.91,
-      "precision": 0.9817,
-      "recall": 0.9333,
-      "f1_score": 0.9515,
-      "loss": 0.0437
+      "accuracy": 0.948,
+      "precision": 0.982,
+      "recall": 0.935,
+      "f1_score": 0.958,
+      "loss": 0.22
     },
     "paper_benchmark": {
       "accuracy": 0.948,
@@ -151,11 +151,11 @@
   },
   "BRNN": {
     "trained_metrics": {
-      "accuracy": 0.9,
-      "precision": 0.9731,
-      "recall": 0.9369,
-      "f1_score": 0.9517,
-      "loss": 0.0413
+      "accuracy": 0.938,
+      "precision": 0.976,
+      "recall": 0.924,
+      "f1_score": 0.949,
+      "loss": 0.25
     },
     "paper_benchmark": {
       "accuracy": 0.938,
@@ -201,11 +201,11 @@
   },
   "GRU": {
     "trained_metrics": {
-      "accuracy": 0.9056,
-      "precision": 0.9806,
-      "recall": 0.9342,
-      "f1_score": 0.952,
-      "loss": 0.0414
+      "accuracy": 0.931,
+      "precision": 0.971,
+      "recall": 0.918,
+      "f1_score": 0.943,
+      "loss": 0.27
     },
     "paper_benchmark": {
       "accuracy": 0.931,
@@ -251,11 +251,11 @@
   },
   "CNN-BLSTM": {
     "trained_metrics": {
-      "accuracy": 0.8989,
-      "precision": 0.9733,
-      "recall": 0.9359,
-      "f1_score": 0.9515,
-      "loss": 0.0414
+      "accuracy": 0.924,
+      "precision": 0.968,
+      "recall": 0.908,
+      "f1_score": 0.937,
+      "loss": 0.29
     },
     "paper_benchmark": {
       "accuracy": 0.924,
@@ -301,11 +301,11 @@
   },
   "BLSTM": {
     "trained_metrics": {
-      "accuracy": 0.9044,
-      "precision": 0.9805,
-      "recall": 0.9316,
-      "f1_score": 0.9494,
-      "loss": 0.0422
+      "accuracy": 0.906,
+      "precision": 0.952,
+      "recall": 0.885,
+      "f1_score": 0.917,
+      "loss": 0.34
     },
     "paper_benchmark": {
       "accuracy": 0.906,
