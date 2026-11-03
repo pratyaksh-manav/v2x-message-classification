@@ -89,10 +89,12 @@ v2x-message-classification/
 │   ├── cnn_blstm_model.pt
 │   ├── blstm_model.pt
 │   └── benchmark_results.json
-├── papers/                             # Reference & Base Literature
-│   ├── Base_Paper_IEEE_11308890_V2X_Classification.pdf
-│   └── Reference_Paper_HMS_IDS_Saurabh_et_al_2025.pdf
+├── papers/                             # Complete Research Literature & Publications
+│   ├── Our_Research_Paper_KAN_GRU_IEEE_Two_Column.pdf # Group's compiled IEEE research paper (9 Pages)
+│   ├── Base_Paper_IEEE_11308890_V2X_Classification.pdf # Base study (Lazaga et al., 2025)
+│   └── Reference_Paper_HMS_IDS_Saurabh_et_al_2025.pdf   # Faculty guide paper (Dr. Kumar Saurabh et al., 2025)
 ├── paper/                              # IEEE Two-Column Research Paper Source & Assets
+│   ├── V2X_KAN_GRU_Research_Paper.pdf  # Compiled publication-ready PDF (Overleaf)
 │   ├── main.tex                        # LaTeX manuscript source (IEEEtran format)
 │   ├── V2X_Overleaf_Project.zip        # Complete Overleaf upload bundle (1-click compile)
 │   ├── INSTRUCTIONS_OVERLEAF.md        # Overleaf compilation instructions
